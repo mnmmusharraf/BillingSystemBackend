@@ -1,13 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.pahana.billingsystembackend.service;
 
-/**
- *
- * @author musharraf
- */
+import com.pahana.billingsystembackend.dao.StaffDAO;
+import com.pahana.billingsystembackend.model.Staff;
+
 public class StaffService {
     
+    private StaffDAO staffDAO;
+    
+    public StaffService(){
+        this.staffDAO = new StaffDAO();
+    }
+    
+    // Validate login by checking username and password
+    public boolean login(String username, String password){
+        return staffDAO.validateLogin(username, password);
+    }
+    
+    public Staff getStaff(String username){
+        return staffDAO.getStaffByUsername(username);
+    }
 }
