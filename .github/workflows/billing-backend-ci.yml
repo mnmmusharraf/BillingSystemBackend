@@ -16,7 +16,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: List BillingSystemBackend files
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Build with Maven
       run: |
         cd BillingSystemBackend
-        ls -l
+        mvn clean install -DskipTests
