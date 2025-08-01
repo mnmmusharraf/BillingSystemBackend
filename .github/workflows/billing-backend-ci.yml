@@ -1,0 +1,22 @@
+name: Billing Backend CI
+
+on:
+  push:
+    paths:
+      - 'BillingSystemBackend/**'
+  pull_request:
+    paths:
+      - 'BillingSystemBackend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: List BillingSystemBackend files
+      run: |
+        cd BillingSystemBackend
+        ls -l
