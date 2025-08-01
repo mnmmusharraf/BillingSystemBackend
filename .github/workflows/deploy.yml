@@ -1,0 +1,30 @@
+name: CD to Local GlassFish
+
+on:
+  push:
+    branches:
+      - master  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Deploy WAR to local GlassFish
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+          scp -i private_key.pem target/*.war musharraf@localhost:/home/musharraf/GlassFish_Server/glassfish/domains/domain1/autodeploy/
+        shell: bash
