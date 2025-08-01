@@ -26,5 +26,6 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
-          scp -i private_key.pem target/*.war musharraf@localhost:/home/musharraf/GlassFish_Server/glassfish/domains/domain1/autodeploy/
+          scp -i private_key.pem -o StrictHostKeyChecking=no target/*.war musharraf@localhost:/home/musharraf/GlassFish_Server/glassfish/domains/domain1/autodeploy/
         shell: bash
+
