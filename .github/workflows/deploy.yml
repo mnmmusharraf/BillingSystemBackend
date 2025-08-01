@@ -1,4 +1,4 @@
-name: CD to Local GlassFish
+name: Local CD to GlassFish
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  
 
     steps:
       - name: Checkout code
@@ -22,10 +22,6 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name: Deploy WAR to local GlassFish
+      - name: Copy WAR to GlassFish autodeploy folder
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
-          scp -i private_key.pem -o StrictHostKeyChecking=no target/*.war musharraf@localhost:/home/musharraf/GlassFish_Server/glassfish/domains/domain1/autodeploy/
-        shell: bash
-
+          cp target/*.war /home/musharraf/GlassFish_Server/glassfish/domains/domain1/autodeploy/
