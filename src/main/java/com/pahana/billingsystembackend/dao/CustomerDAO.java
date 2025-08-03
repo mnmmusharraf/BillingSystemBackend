@@ -6,7 +6,6 @@ import com.pahana.billingsystembackend.model.Customer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,27 +59,78 @@ public class CustomerDAO {
     }
 
     // Mehtod to get All Customers from the db
-    public List<Customer> getAllCustomer(){
+    public List<Customer> getAllCustomer() {
         List<Customer> customerList = new ArrayList<>();
-        
-        String query = "SELECT * FORM customer";
-        
-        try(Connection conn = DBConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query);
-                ResultSet rs = stmt.executeQuery()){
-            while(rs.next()){
+
+        String query = "SELECT * FROM customer";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
                 Customer customer = new Customer();
                 customer.setAccountNumber(rs.getString("account_number"));
                 customer.setName(rs.getString("name"));
                 customer.setAddress(rs.getString("address"));
                 customer.setTelephone(rs.getString("telephone"));
                 customer.setConsumedUnits(rs.getInt("units_consumed"));
-                
+
                 customerList.add(customer);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-         return customerList;
+        return customerList;
+    }
+
+    public Customer getCustomerByAccountNum(String accountNum) {
+        String query = "SELECT * FROM customer WHERE account_number = ?";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, accountNum);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Customer customer = new Customer();
+                customer.setAccountNumber(rs.getString("account_number"));
+                customer.setName(rs.getString("name"));
+                customer.setAddress(rs.getString("address"));
+                customer.setTelephone(rs.getString("telephone"));
+                customer.setConsumedUnits(rs.getInt("units_consumed"));
+                return customer;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean updateCustomer(Customer customer, String accountNum) {
+        String query = "UPDATE customer SET  name = ?, address = ?, telephone = ? WHERE account_number = ?";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, customer.getName());
+            stmt.setString(2, customer.getAddress());
+            stmt.setString(3, customer.getTelephone());
+            stmt.setString(4, accountNum);
+
+            int rows = stmt.executeUpdate();
+
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteCustomerByAccountNum(String accountNum) {
+        String query = "DELETE FROM customer WHERE account_number = ?";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, accountNum);
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
