@@ -2,27 +2,27 @@ name: Billing Backend CI
 
 on:
   push:
-    paths:
-      - 'BillingSystemBackend/**'
+    branches:
+      - master
   pull_request:
-    paths:
-      - 'BillingSystemBackend/**'
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '17'
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    - name: Build with Maven
-      run: |
-        cd BillingSystemBackend
-        mvn clean install -DskipTests
+      - name: Build with Maven
+        run: |
+          cd BillingSystemBackend
+          mvn clean install -DskipTests
