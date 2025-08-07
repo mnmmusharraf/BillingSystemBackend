@@ -32,4 +32,8 @@ public class ItemService {
     public boolean deleteItem(int itemId){
         return itemDAO.deleteItem(itemId);
     }
+    
+    public boolean isItemNameExists(String itemName){
+        return itemDAO.isItemNameExists(itemName);
+    }
 }
