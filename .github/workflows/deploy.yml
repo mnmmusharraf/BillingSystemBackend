@@ -22,6 +22,9 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
+      - name: Cleanup old logs (optional)
+        run: rm -f /home/musharraf/actions-runner/_diag/pages/*.log || true
+
       - name: Copy WAR to GlassFish autodeploy folder
         run: |
           cp target/*.war /home/musharraf/GlassFish_Server/glassfish/domains/domain1/autodeploy/
