@@ -63,7 +63,7 @@ public class ItemAPI {
             return Response.ok(gson.toJson("Item updated successfully.")).build();
         }else{
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(gson.toJson("Fsiled to update item."))
+                    .entity(gson.toJson("Failed to update item."))
                     .build();
         }
     }
