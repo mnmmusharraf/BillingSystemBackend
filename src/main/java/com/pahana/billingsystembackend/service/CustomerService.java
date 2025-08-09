@@ -16,6 +16,10 @@ public class CustomerService {
     public List<Customer> getAllCustomer() {
         return customerDAO.getAllCustomer();
     }
+    
+    public List<Customer> searchCustomers(String searchTerms){
+        return customerDAO.searchCustomers(searchTerms);
+    }
 
     // Add new customer
     public boolean addCustomer(Customer customer) {

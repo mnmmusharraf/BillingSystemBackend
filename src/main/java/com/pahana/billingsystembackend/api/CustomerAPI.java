@@ -23,6 +23,14 @@ public class CustomerAPI {
         String json = gson.toJson(customerList);
         return Response.ok(json, MediaType.APPLICATION_JSON).build();
     }
+    
+    @GET
+    @Path("/search")
+    public Response searchCustomers(@QueryParam("searchTerms") String searchTerms){
+        List<Customer> customerList = customerService.searchCustomers(searchTerms);
+        String json = gson.toJson(customerList);
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
+    }
 
     // GET one customer by account number
     @GET
