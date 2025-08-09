@@ -92,7 +92,7 @@ public class ItemAPI {
     
     @GET
     @Path("/check-unique")
-    public Response checkUnique(@QueryParam("name") String itemName){
+    public Response checkUnique(@QueryParam("itemName") String itemName){
         boolean itemNameExists = itemService.isItemNameExists(itemName);
         
         String json = gson.toJson(new UniqueCheckResponse(itemNameExists));

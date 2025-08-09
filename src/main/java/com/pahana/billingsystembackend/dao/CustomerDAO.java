@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CustomerDAO {
@@ -79,6 +80,39 @@ public class CustomerDAO {
             e.printStackTrace();
         }
         return customerList;
+    }
+    
+    public List<Customer> searchCustomers(String searchTerms){
+        List<Customer> customerList = new ArrayList<>();
+        
+        String query = "SELECT * FROM customer " + 
+                "WHERE account_number LIKE ? OR name LIKE ? OR address LIKE ? OR telephone LIKE ?";
+        
+        try(Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)){
+            String searchPattern = "%" + searchTerms + "%";
+            
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
+            
+            ResultSet rs = stmt.executeQuery();
+           
+            while(rs.next()){
+                Customer customer = new Customer();
+                customer.setAccountNumber(rs.getString("account_number"));
+                customer.setName(rs.getString("name"));
+                customer.setAddress(rs.getString("address"));
+                customer.setTelephone(rs.getString("telephone"));
+                
+                customerList.add(customer);
+            }
+            return customerList;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     public Customer getCustomerByAccountNum(String accountNum) {
