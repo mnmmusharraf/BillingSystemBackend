@@ -24,6 +24,14 @@ public class ItemAPI {
     }
     
     @GET
+    @Path("/search")
+    public Response searchItems(@QueryParam("searchTerms") String searchTerms){
+        List<Item> itemList = itemService.searchItems(searchTerms);
+        String json = gson.toJson(itemList);
+        return Response.ok(json,MediaType.APPLICATION_JSON).build();
+    }
+    
+    @GET
     @Path("/{id}")
     public Response getItemById(@PathParam("id") int itemId){
         Item item = itemService.getItemById(itemId);

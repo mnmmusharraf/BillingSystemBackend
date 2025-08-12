@@ -17,6 +17,10 @@ public class ItemService {
         return itemDAO.getAllItems();
     }
     
+    public List<Item> searchItems(String searchTerms){
+        return itemDAO.searchItems(searchTerms);
+    }
+    
     public boolean addItem(Item item){
         return itemDAO.addItem(item);
     }

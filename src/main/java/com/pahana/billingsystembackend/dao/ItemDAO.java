@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -126,6 +127,35 @@ public class ItemDAO {
         }catch(SQLException e){
             e.printStackTrace();
             return false;
+        }
+    }
+    
+    public List<Item> searchItems(String searchTerms){
+        List<Item> itemList = new ArrayList<>();
+        
+        String query = "SELECT * FROM item " +
+                "WHERE item_id LIKE ? OR name LIKE ?";
+        
+        try(Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)){
+            String searchPattern = "%" + searchTerms + "%";
+            
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                Item item = new Item();
+                item.setItemId(rs.getInt("item_id"));
+                item.setItemName(rs.getString("name"));
+                
+                itemList.add(item);
+            }
+            return itemList;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return Collections.emptyList();
         }
     }
 }
