@@ -147,8 +147,10 @@ public class ItemDAO {
             
             while(rs.next()){
                 Item item = new Item();
-                item.setItemId(rs.getInt("item_id"));
+                 item.setItemId(rs.getInt("item_id"));
                 item.setItemName(rs.getString("name"));
+                item.setItemPrice(rs.getDouble("price"));
+                item.setStockQuantity(rs.getInt("stock_quantity"));
                 
                 itemList.add(item);
             }
