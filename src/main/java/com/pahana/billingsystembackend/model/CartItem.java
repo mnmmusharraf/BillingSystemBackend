@@ -1,13 +1,18 @@
 package com.pahana.billingsystembackend.model;
 
 public class CartItem {
-    private int itemId;       
-    private int quantity;     
+    private int itemId;
+    private String name;
+    private double price;
+    private int quantity;
+     
 
     public CartItem() {}
 
-    public CartItem(int itemId, int quantity) {
+    public CartItem(int itemId, String name, double price, int quantity) {
         this.itemId = itemId;
+        this.name = name;
+        this.price = price;
         this.quantity = quantity;
     }
 
@@ -19,6 +24,22 @@ public class CartItem {
         this.itemId = itemId;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public int getQuantity() {
         return quantity;
     }
@@ -26,4 +47,9 @@ public class CartItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    
+    
+
+    
 }
