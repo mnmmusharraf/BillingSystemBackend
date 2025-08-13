@@ -36,6 +36,30 @@ public class CartAPI {
 
         return Response.ok(cart).build();
     }
+    
+    @PUT
+    @Path("/{id}")
+    public Response updateCart(@Context HttpServletRequest request, @PathParam("id") int itemId, String stockQuantityJson) {
+        HttpSession session = request.getSession();
+        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        if (cart == null) cart = new ArrayList<>();
+
+        CartItem incoming = gson.fromJson(stockQuantityJson, CartItem.class);
+        int updatedQty = incoming.getQuantity();
+
+        // Remove all existing CartItems with itemId
+        cart.removeIf(item -> item.getItemId() == itemId);
+        if (updatedQty > 0) {
+            Item dbItem = itemService.getItemById(itemId);
+            if (dbItem != null) {
+                cart.add(new CartItem(itemId, dbItem.getItemName(), dbItem.getItemPrice(), updatedQty));
+            }
+        }
+
+        session.setAttribute("cart", cart);
+
+        return Response.ok().build();
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -76,6 +100,26 @@ public class CartAPI {
         HttpSession session = request.getSession();
         session.removeAttribute("cart");
         return Response.ok().build();
+    }
+    
+    @DELETE
+    @Path("/{id}")
+    public Response removeCartItem(@Context HttpServletRequest request, @PathParam("id") int itemId) {
+        HttpSession session = request.getSession();
+        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        if (cart == null) cart = new ArrayList<>();
+
+        // Remove all CartItems with the given itemId
+        boolean removed = cart.removeIf(item -> item.getItemId() == itemId);
+
+        // Save the updated cart back to session
+        session.setAttribute("cart", cart);
+
+        if (removed) {
+            return Response.ok().build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).entity("Item not found in cart").build();
+        }
     }
     
 }
