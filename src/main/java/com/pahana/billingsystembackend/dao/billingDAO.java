@@ -52,6 +52,7 @@ public class billingDAO {
             itemStmt.executeBatch();
 
             conn.commit();
+            updateUnitsConsumed(bill.getAccountNumber());
             return billId;
         } catch (SQLException e) {
             if (conn != null) conn.rollback();
@@ -184,6 +185,18 @@ public class billingDAO {
             return bills;
         } finally {
             conn.close();
+        }
+    }
+    
+    public void updateUnitsConsumed(String accountNumber) throws SQLException {
+        String sql = "UPDATE customer SET units_consumed = (SELECT COALESCE(SUM(bi.quantity), 0) " +
+                     "FROM bill b JOIN bill_item bi ON b.id = bi.bill_id WHERE b.account_number = ?) " +
+                     "WHERE account_number = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, accountNumber);
+            stmt.setString(2, accountNumber);
+            stmt.executeUpdate();
         }
     }
 }
