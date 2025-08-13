@@ -22,12 +22,14 @@ public class billingDAO {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
 
-            String billSql = "INSERT INTO bill (account_number, staff_user, bill_date, total_amount) VALUES (?, ?, ?, ?)";
+            String billSql = "INSERT INTO bill (account_number, staff_user, bill_date, total_amount, cash_given, change_due) VALUES (?, ?, ?, ?,?,?)";
             billStmt = conn.prepareStatement(billSql, Statement.RETURN_GENERATED_KEYS);
             billStmt.setString(1, bill.getAccountNumber());
             billStmt.setString(2, bill.getStaffUser());
             billStmt.setTimestamp(3, new Timestamp(bill.getBillDate().getTime()));
             billStmt.setDouble(4, bill.getTotalAmount());
+            billStmt.setDouble(5, bill.getCashGiven());
+            billStmt.setDouble(6, bill.getChangeDue());
             billStmt.executeUpdate();
 
             rs = billStmt.getGeneratedKeys();
@@ -79,6 +81,8 @@ public class billingDAO {
                 bill.setStaffUser(rs.getString("staff_user"));
                 bill.setBillDate(rs.getTimestamp("bill_date"));
                 bill.setTotalAmount(rs.getDouble("total_amount"));
+                bill.setCashGiven(rs.getDouble("cash_given"));
+                bill.setChangeDue(rs.getDouble("change_due"));
 
                 // Get bill items
                 List<BillItem> items = new ArrayList<>();
@@ -109,13 +113,15 @@ public class billingDAO {
     public boolean updateBill(Billing bill) throws SQLException {
         Connection conn = DBConnection.getConnection();
         try {
-            String sql = "UPDATE bill SET account_number = ?, staff_user = ?, bill_date = ?, total_amount = ? WHERE id = ?";
+            String sql = "UPDATE bill SET account_number = ?, staff_user = ?, bill_date = ?, total_amount = ?, cash_given = ?, change_due = ? WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, bill.getAccountNumber());
             stmt.setString(2, bill.getStaffUser());
             stmt.setTimestamp(3, new Timestamp(bill.getBillDate().getTime()));
             stmt.setDouble(4, bill.getTotalAmount());
-            stmt.setInt(5, bill.getId());
+            stmt.setDouble(5, bill.getCashGiven());
+            stmt.setDouble(6, bill.getChangeDue());
+            stmt.setInt(7, bill.getId());
             int rows = stmt.executeUpdate();
             return rows > 0;
         } finally {
@@ -171,6 +177,8 @@ public class billingDAO {
                 bill.setStaffUser(rs.getString("staff_user"));
                 bill.setBillDate(rs.getTimestamp("bill_date"));
                 bill.setTotalAmount(rs.getDouble("total_amount"));
+                bill.setCashGiven(rs.getDouble("cash_given"));
+                bill.setChangeDue(rs.getDouble("change_due"));
                 bills.add(bill);
             }
             return bills;

@@ -10,18 +10,40 @@ public class Billing {
     private Date billDate;
     private double totalAmount;
     private List<BillItem> items;
+    private double cashGiven;
+    private double changeDue;
 
     public Billing() {
     }
 
-    public Billing(int id, String accountNumber, String staffUser, Date billDate, double totalAmount, List<BillItem> items) {
+    public Billing(int id, String accountNumber, String staffUser, Date billDate, double totalAmount, List<BillItem> items, double cashGiven, double changeDue) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.staffUser = staffUser;
         this.billDate = billDate;
         this.totalAmount = totalAmount;
         this.items = items;
+        this.cashGiven = cashGiven;
+        this.changeDue = changeDue;
     }
+
+    public double getCashGiven() {
+        return cashGiven;
+    }
+
+    public void setCashGiven(double cashGiven) {
+        this.cashGiven = cashGiven;
+    }
+
+    public double getChangeDue() {
+        return changeDue;
+    }
+
+    public void setChangeDue(double changeDue) {
+        this.changeDue = changeDue;
+    }
+
+    
 
 
     public int getId() {
