@@ -16,6 +16,7 @@ public class ItemDAO {
     
     //Method to add item
     public boolean addItem(Item item){
+        if (item == null) return false;
         String query = "INSERT INTO item (name, price, stock_quantity) VALUES (?,?,?)";
         
         try(Connection conn = DBConnection.getConnection();
@@ -83,6 +84,7 @@ public class ItemDAO {
     
     // Update item
     public boolean updateItem(Item item, int itemId){
+        if (item == null) return false;
         String query = "UPDATE item SET name =?, price =?, stock_quantity =? WHERE item_id =?";
         
         try(Connection conn = DBConnection.getConnection();

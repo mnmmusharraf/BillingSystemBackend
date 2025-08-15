@@ -35,6 +35,7 @@ public class CustomerDAO {
 
     // Method to add Customer
     public boolean addCustomer(Customer customer) {
+        if (customer == null) return false;
         String newAccountNumber = generateNextAccountNumber();
         if (newAccountNumber == null) {
             return false;
@@ -139,6 +140,7 @@ public class CustomerDAO {
     }
 
     public boolean updateCustomer(Customer customer, String accountNum) {
+        if (customer == null) return false;
         String query = "UPDATE customer SET  name = ?, address = ?, telephone = ? WHERE account_number = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, customer.getName());
